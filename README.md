@@ -106,6 +106,12 @@ Validate my Play Store metadata in ./fastlane/metadata/android and sync it with 
 Set up a staged rollout to production for package com.example.app
 ```
 
+> **Caution: staged rollouts need health checks.** Between rollout stages,
+> monitor Android vitals (crashes, ANRs) and reviews before increasing the
+> percentage. A `--status completed` release (or 100% rollout) ships to all
+> users immediately with no staging, so use `--status inProgress` with
+> incremental `rollout --percentage` steps when you want a gated rollout.
+
 ```
 Adjust Google Play subscription pricing by region using PPP
 ```
@@ -114,8 +120,6 @@ Adjust Google Play subscription pricing by region using PPP
 
 Each skill contains:
 - `SKILL.md` - Instructions for the agent
-- `scripts/` - Helper scripts for automation (optional)
-- `references/` - Supporting documentation (optional)
 
 ## License
 

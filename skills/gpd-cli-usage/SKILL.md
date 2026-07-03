@@ -24,6 +24,12 @@ Use this skill when you need to run or design `gpd` commands for Google Play Dev
 
 ## Authentication and defaults
 - Service account auth via `GPD_SERVICE_ACCOUNT_KEY` is required.
+- Prefer a key **file** with `0600` permissions (`chmod 600 key.json`) or a
+  secret manager over pasting raw JSON into the environment. Inline
+  `export GPD_SERVICE_ACCOUNT_KEY='{...}'` leaks the key into shell history and
+  the process environment (visible via `ps`, `/proc`, and child processes).
+- Use a dedicated, least-privilege service account scoped only to the Play
+  Console permissions the task needs; never commit keys to source control.
 - Validate access for a package:
   - `gpd auth check --package com.example.app`
 
