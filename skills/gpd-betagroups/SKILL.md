@@ -20,6 +20,12 @@ gpd publish release --package com.example.app --track internal --status complete
 gpd publish release --package com.example.app --track beta --status completed
 ```
 
+> **Caution: `--status completed` ships immediately to all users of that
+> track.** For production and other staged rollouts, add health checks between
+> stages — monitor Android vitals (crashes, ANRs) and reviews before widening
+> distribution — and prefer `--status inProgress` with incremental
+> `rollout --percentage` steps instead of shipping to everyone at once.
+
 ## Promote between testing tracks
 ```bash
 gpd publish promote --package com.example.app --from-track internal --to-track beta

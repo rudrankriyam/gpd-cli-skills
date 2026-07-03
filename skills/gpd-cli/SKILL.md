@@ -28,6 +28,15 @@ gpd auth status
 gpd auth check --package com.example.app
 ```
 
+> **Credential handling.** Prefer pointing `gpd` at a key **file** with `0600`
+> permissions (`chmod 600 key.json`) or fetching the key from a secret manager
+> at runtime, rather than pasting the raw JSON into an environment variable.
+> Inline `export GPD_SERVICE_ACCOUNT_KEY='{...}'` leaks the key into shell
+> history and the process environment (visible via `ps`, `/proc`, and to child
+> processes). Use a dedicated, least-privilege service account scoped to only
+> the Play Console permissions the task needs, and never commit keys to source
+> control.
+
 ## CLI Usage
 
 - Use `gpd --help` and `gpd <area> --help` to confirm commands and flags.
@@ -181,6 +190,13 @@ gpd purchases subscriptions cancel --package com.example.app --subscription-id s
 gpd purchases subscriptions refund --package com.example.app --subscription-id sub123 --token TOKEN
 ```
 
+> **Money-moving commands.** `purchases subscriptions refund` and
+> `purchases subscriptions cancel` move real money and affect a customer's
+> subscription. Only run them after the user explicitly asks for that exact
+> action and confirms the package, subscription ID, and token. Run with
+> `--dry-run` first where supported and show the user the result before the
+> real invocation.
+
 ## Permissions
 
 ```bash
@@ -188,6 +204,13 @@ gpd permissions users list --developer-id DEV_ID
 gpd permissions users create --developer-id DEV_ID --email user@example.com --developer-permissions CAN_VIEW_FINANCIAL_DATA_GLOBAL
 gpd permissions grants create --package com.example.app --email user@example.com --app-permissions CAN_REPLY_TO_REVIEWS
 ```
+
+> **Access-granting commands.** `permissions users create` and
+> `permissions grants create` grant a person access to the developer account or
+> an app (including financial-data and review permissions). Only run them after
+> the user explicitly asks and confirms the email address and the exact
+> permissions being granted. Grant least privilege, run with `--dry-run` first
+> where supported, and show the user the result before the real invocation.
 
 ## Analytics
 
