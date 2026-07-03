@@ -10,6 +10,7 @@ Use this skill to map names to IDs needed by other gpd commands.
 ## Package name (app ID)
 - Package name is the primary identifier: `com.example.app`.
 - Always pass `--package` explicitly for deterministic results.
+- This resolver skill is read-only. Use only `list`, `get`, or status-style commands here; do not run mutating commands while resolving IDs.
 
 ## Track names
 - Common tracks: `internal`, `alpha`, `beta`, `production`.
@@ -34,14 +35,14 @@ Use this skill to map names to IDs needed by other gpd commands.
   - `gpd monetization subscriptions list --package com.example.app`
   - `gpd monetization subscriptions get sub123 --package com.example.app`
 - Base plans and offers:
-  - `gpd monetization baseplans migrate-prices --package com.example.app sub123 plan456 --region-code US --price-micros 9990000`
+  - `gpd monetization subscriptions get sub123 --package com.example.app`
   - `gpd monetization offers list --package com.example.app sub123 plan456`
 
 ## Permissions IDs
 - Developer users:
   - `gpd permissions users list --developer-id DEV_ID`
 - App grants:
-  - `gpd permissions grants create --package com.example.app --email user@example.com --app-permissions CAN_REPLY_TO_REVIEWS`
+  - Resolve the package name and user email with read-only commands before using a permissions-management skill for grant changes.
 
 ## Output tips
 - JSON is default; use `--pretty` for debugging.

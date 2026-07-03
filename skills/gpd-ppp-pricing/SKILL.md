@@ -11,8 +11,21 @@ Use this skill to set different prices per region for subscriptions and one-time
 - Ensure credentials are set (`GPD_SERVICE_ACCOUNT_KEY`).
 - Use `--package` explicitly.
 - Know target region codes and price micros.
+- For verification-only requests, run only read-only `list`/`get` commands. Do not run `create`, `update`, `batchUpdate`, `migrate-prices`, `batch-migrate-prices`, or `batch-update-states`.
 
-## Subscription base plan pricing
+## Verify current pricing (read-only)
+
+Use this section when asked to inspect, audit, or verify pricing. These commands must not mutate Play Console state.
+
+```bash
+gpd monetization subscriptions get sub123 --package com.example.app
+gpd monetization onetimeproducts get sku123 --package com.example.app
+gpd monetization offers list --package com.example.app sub123 plan456
+```
+
+## Apply subscription base plan pricing
+
+Only use this section after the user explicitly asks to change pricing and confirms the package name, subscription ID, base plan ID, regions, and price micros.
 
 ### Migrate prices for a base plan
 ```bash
@@ -44,25 +57,29 @@ Example `migrate.json`:
 }
 ```
 
-## One-time products pricing
+## Apply one-time product pricing
+
+Only use this section after the user explicitly asks to create or update a one-time product and confirms the package name, product ID, product type, and price micros.
 
 ```bash
 gpd monetization onetimeproducts create --package com.example.app --product-id sku123 --type consumable
 gpd monetization onetimeproducts update --package com.example.app sku123 --default-price 1990000
 ```
 
-## Offers and regional variants
+## Apply offers and regional variants
+
+Only use this section after the user explicitly asks to create or update offers and confirms the package name, subscription ID, base plan ID, offer ID, and input file contents.
 
 ```bash
-gpd monetization offers list --package com.example.app sub123 plan456
 gpd monetization offers create --package com.example.app sub123 plan456 --offer-id offer789 --file offer.json
 gpd monetization offers batchUpdate --package com.example.app sub123 plan456 --file offers.json
 ```
 
-## Verify current pricing
+## Execute base plan state changes
+
+Only use this section after the user explicitly asks to change base plan states and confirms the package name, subscription ID, and `states.json` contents. Do not use this section to verify pricing.
 
 ```bash
-gpd monetization subscriptions get sub123 --package com.example.app
 gpd monetization baseplans batch-update-states --package com.example.app sub123 --file states.json
 ```
 
